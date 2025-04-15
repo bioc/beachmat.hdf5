@@ -1,5 +1,5 @@
 Package: beachmat.hdf5
-Version: 1.6.0
+Version: 1.7.0
 Date: 2024-11-08
 Title: beachmat bindings for HDF5-backed matrices
 Description: 
