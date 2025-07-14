@@ -1,10 +1,11 @@
 #include "Rcpp.h"
 #include "Rtatami.h"
 #include "tatami_hdf5/tatami_hdf5.hpp"
+
 #include <string>
 
 //[[Rcpp::export(rng=false)]]
-SEXP initialize_from_hdf5_sparse(std::string file, std::string name, size_t nrow, size_t ncol, bool csr, int cache_size) {
+SEXP initialize_from_hdf5_sparse(std::string file, std::string name, int nrow, int ncol, bool csr, int cache_size) {
     tatami_hdf5::CompressedSparseMatrixOptions opt;
     opt.maximum_cache_size = cache_size;
     auto output = Rtatami::new_BoundNumericMatrix();

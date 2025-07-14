@@ -1,7 +1,12 @@
 #include "Rcpp.h"
 #include "Rtatami.h"
 #include "tatami_hdf5/tatami_hdf5.hpp"
+#include "sanisizer/sanisizer.hpp"
+
 #include <string>
+#include <cstdint>
+#include <limits>
+#include <vector>
 
 template<typename Tx, typename Ti>
 SEXP load_into_memory_sparse_base(const std::string& file, const std::string& name, int nrow, int ncol, bool csr) {
@@ -20,8 +25,8 @@ SEXP load_into_memory_sparse_base(const std::string& file, const std::string& na
 
 template<typename Tx>
 SEXP load_into_memory_sparse_i_max(const std::string& file, const std::string& name, int nrow, int ncol, bool csr) {
-    if ((csr ? ncol : nrow) <= std::numeric_limits<uint16_t>::max()) {
-        return load_into_memory_sparse_base<Tx, uint16_t>(file, name, nrow, ncol, csr);
+    if (sanisizer::is_less_than_or_equal(csr ? ncol : nrow, std::numeric_limits<std::uint16_t>::max())) {
+        return load_into_memory_sparse_base<Tx, std::uint16_t>(file, name, nrow, ncol, csr);
     } else {
         return load_into_memory_sparse_base<Tx, int>(file, name, nrow, ncol, csr);
     }
@@ -52,7 +57,7 @@ SEXP load_into_memory_sparse(std::string file, std::string name, int nrow, int n
     if (is_float && !forced_int) {
         return load_into_memory_sparse_i_max<double>(file, name, nrow, ncol, csr);
     } else if (is_ushort) {
-        return load_into_memory_sparse_i_max<uint16_t>(file, name, nrow, ncol, csr);
+        return load_into_memory_sparse_i_max<std::uint16_t>(file, name, nrow, ncol, csr);
     } else {
         return load_into_memory_sparse_i_max<int>(file, name, nrow, ncol, csr);
     }
@@ -68,7 +73,7 @@ SEXP load_into_memory_dense(std::string file, std::string name, bool forced_int,
     if (is_float && !forced_int) {
         output->ptr = tatami_hdf5::load_dense_matrix<double, int, std::vector<double> >(file, name, transpose);
     } else if (is_ushort) {
-        output->ptr = tatami_hdf5::load_dense_matrix<double, int, std::vector<uint16_t> >(file, name, transpose);
+        output->ptr = tatami_hdf5::load_dense_matrix<double, int, std::vector<std::uint16_t> >(file, name, transpose);
     } else {
         output->ptr = tatami_hdf5::load_dense_matrix<double, int, std::vector<int> >(file, name, transpose);
     }
@@ -82,8 +87,8 @@ SEXP load_into_memory_dense_to_sparse_base(const std::string& file, const std::s
     tatami_hdf5::DenseMatrix<double, int> mat(file, name, transpose, opt);
 
     auto output = Rtatami::new_BoundNumericMatrix();
-    if ((byrow ? mat.ncol() : mat.nrow()) <= std::numeric_limits<uint16_t>::max()) {
-        output->ptr = tatami::convert_to_compressed_sparse<double, int, Tx, uint16_t>(&mat, byrow);
+    if (sanisizer::is_less_than_or_equal(byrow ? mat.ncol() : mat.nrow(), std::numeric_limits<std::uint16_t>::max())) {
+        output->ptr = tatami::convert_to_compressed_sparse<double, int, Tx, std::uint16_t>(&mat, byrow);
     } else {
         output->ptr = tatami::convert_to_compressed_sparse<double, int, Tx, int>(&mat, byrow);
     }
@@ -99,7 +104,7 @@ SEXP load_into_memory_dense_as_sparse(std::string file, std::string name, bool f
     if (is_float && !forced_int) {
         return load_into_memory_dense_to_sparse_base<double>(file, name, transpose, cache_size, byrow);
     } else if (is_ushort) {
-        return load_into_memory_dense_to_sparse_base<uint16_t>(file, name, transpose, cache_size, byrow);
+        return load_into_memory_dense_to_sparse_base<std::uint16_t>(file, name, transpose, cache_size, byrow);
     } else {
         return load_into_memory_dense_to_sparse_base<int>(file, name, transpose, cache_size, byrow);
     }

@@ -11,14 +11,14 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // initialize_from_hdf5_sparse
-SEXP initialize_from_hdf5_sparse(std::string file, std::string name, size_t nrow, size_t ncol, bool csr, int cache_size);
+SEXP initialize_from_hdf5_sparse(std::string file, std::string name, int nrow, int ncol, bool csr, int cache_size);
 RcppExport SEXP _beachmat_hdf5_initialize_from_hdf5_sparse(SEXP fileSEXP, SEXP nameSEXP, SEXP nrowSEXP, SEXP ncolSEXP, SEXP csrSEXP, SEXP cache_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type file(fileSEXP);
     Rcpp::traits::input_parameter< std::string >::type name(nameSEXP);
-    Rcpp::traits::input_parameter< size_t >::type nrow(nrowSEXP);
-    Rcpp::traits::input_parameter< size_t >::type ncol(ncolSEXP);
+    Rcpp::traits::input_parameter< int >::type nrow(nrowSEXP);
+    Rcpp::traits::input_parameter< int >::type ncol(ncolSEXP);
     Rcpp::traits::input_parameter< bool >::type csr(csrSEXP);
     Rcpp::traits::input_parameter< int >::type cache_size(cache_sizeSEXP);
     rcpp_result_gen = Rcpp::wrap(initialize_from_hdf5_sparse(file, name, nrow, ncol, csr, cache_size));
