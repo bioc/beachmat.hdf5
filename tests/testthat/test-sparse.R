@@ -8,12 +8,12 @@ z <- suppressWarnings(writeTENxMatrix(y))
 
 test_that("initialization works correctly for sparse HDF5 arrays", {
     ptr <- initializeCpp(z)
-    expect_identical(beachmat:::tatami_dim(ptr), dim(y))
-    expect_identical(beachmat:::tatami_row(ptr, 31), y[31,])
-    expect_identical(beachmat:::tatami_column(ptr, 12), y[,12])
+    expect_identical(beachmat::tatami.dim(ptr), dim(y))
+    expect_identical(beachmat::tatami.get(ptr, 31, row=TRUE), y[31,])
+    expect_identical(beachmat::tatami.get(ptr, 12, row=FALSE), y[,12])
 
-    expect_identical(beachmat:::tatami_row_sums(ptr, 2), Matrix::rowSums(y))
-    expect_identical(beachmat:::tatami_column_sums(ptr, 2), Matrix::colSums(y))
+    expect_identical(beachmat::tatami.sums(ptr, row=TRUE, num.threads=2), Matrix::rowSums(y))
+    expect_identical(beachmat::tatami.sums(ptr, row=FALSE, num.threads=2), Matrix::colSums(y))
 })
 
 test_that("memorization works correctly for sparse HDF5 arrays", {
@@ -21,11 +21,11 @@ test_that("memorization works correctly for sparse HDF5 arrays", {
     ptr2 <- initializeCpp(z, hdf5.realize=TRUE)
     expect_identical(capture.output(print(ptr1)), capture.output(print(ptr2)))
 
-    expect_identical(beachmat:::tatami_row(ptr1, 35), y[35,])
-    expect_identical(beachmat:::tatami_column(ptr1, 16), y[,16])
+    expect_identical(beachmat::tatami.get(ptr1, 35, row=TRUE), y[35,])
+    expect_identical(beachmat::tatami.get(ptr1, 16, row=FALSE), y[,16])
 
-    expect_identical(beachmat:::tatami_row(ptr2, 45), y[45,])
-    expect_identical(beachmat:::tatami_column(ptr2, 6), y[,6])
+    expect_identical(beachmat::tatami.get(ptr2, 45, row=TRUE), y[45,])
+    expect_identical(beachmat::tatami.get(ptr2, 6, row=FALSE), y[,6])
 })
 
 # Manually writing this to get an integer dataset.
@@ -46,11 +46,11 @@ test_that("memorization works correctly for sparse integer HDF5 arrays", {
     ptr2 <- initializeCpp(z, hdf5.realize=TRUE)
     expect_identical(capture.output(print(ptr1)), capture.output(print(ptr2)))
 
-    expect_equal(beachmat:::tatami_row(ptr1, 35), y2[35,])
-    expect_equal(beachmat:::tatami_column(ptr1, 16), y2[,16])
+    expect_equal(beachmat::tatami.get(ptr1, 35, row=TRUE), y2[35,])
+    expect_equal(beachmat::tatami.get(ptr1, 16, row=FALSE), y2[,16])
 
-    expect_equal(beachmat:::tatami_row(ptr2, 35), y2[35,])
-    expect_equal(beachmat:::tatami_column(ptr2, 16), y2[,16])
+    expect_equal(beachmat::tatami.get(ptr2, 35, row=TRUE), y2[35,])
+    expect_equal(beachmat::tatami.get(ptr2, 16, row=FALSE), y2[,16])
 })
 
 library(rhdf5)
@@ -68,9 +68,9 @@ test_that("memorization works correctly for sparse small integer HDF5 arrays", {
     ptr2 <- initializeCpp(z, hdf5.realize=TRUE)
     expect_identical(capture.output(print(ptr1)), capture.output(print(ptr2)))
 
-    expect_equal(beachmat:::tatami_row(ptr1, 8), y2[8,])
-    expect_equal(beachmat:::tatami_column(ptr1, 19), y2[,19])
+    expect_equal(beachmat::tatami.get(ptr1, 8, row=TRUE), y2[8,])
+    expect_equal(beachmat::tatami.get(ptr1, 19, row=FALSE), y2[,19])
 
-    expect_equal(beachmat:::tatami_row(ptr2, 28), y2[28,])
-    expect_equal(beachmat:::tatami_column(ptr2, 9), y2[,9])
+    expect_equal(beachmat::tatami.get(ptr2, 28, row=TRUE), y2[28,])
+    expect_equal(beachmat::tatami.get(ptr2, 9, row=FALSE), y2[,9])
 })
