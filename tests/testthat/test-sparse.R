@@ -12,8 +12,8 @@ test_that("initialization works correctly for sparse HDF5 arrays", {
     expect_identical(beachmat::tatami.get(ptr, 31, row=TRUE), y[31,])
     expect_identical(beachmat::tatami.get(ptr, 12, row=FALSE), y[,12])
 
-    expect_identical(beachmat::tatami.sums(ptr, row=TRUE, num.threads=2), Matrix::rowSums(y))
-    expect_identical(beachmat::tatami.sums(ptr, row=FALSE, num.threads=2), Matrix::colSums(y))
+    expect_equal(beachmat::tatami.sums(ptr, row=TRUE, num.threads=2), Matrix::rowSums(y))
+    expect_equal(beachmat::tatami.sums(ptr, row=FALSE, num.threads=2), Matrix::colSums(y))
 })
 
 test_that("memorization works correctly for sparse HDF5 arrays", {

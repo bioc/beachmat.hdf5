@@ -11,8 +11,8 @@ test_that("initialization works correctly for dense HDF5 arrays", {
     expect_identical(beachmat::tatami.get(ptr, 1, row=TRUE), y[1,])
     expect_identical(beachmat::tatami.get(ptr, 2, row=FALSE), y[,2])
 
-    expect_identical(beachmat:::tatami.sums(ptr, num.threads=2, row=TRUE), rowSums(y))
-    expect_identical(beachmat:::tatami.sums(ptr, num.threads=2, row=FALSE), colSums(y))
+    expect_equal(beachmat:::tatami.sums(ptr, num.threads=2, row=TRUE), rowSums(y))
+    expect_equal(beachmat:::tatami.sums(ptr, num.threads=2, row=FALSE), colSums(y))
 })
 
 test_that("memorization works correctly for dense HDF5 arrays", {

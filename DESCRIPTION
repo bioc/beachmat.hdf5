@@ -1,6 +1,6 @@
 Package: beachmat.hdf5
-Version: 1.11.0
-Date: 2026-04-11
+Version: 1.11.1
+Date: 2026-08-21
 Title: beachmat bindings for HDF5-backed matrices
 Description: 
     Extends beachmat to support initialization of tatami matrices from HDF5-backed arrays.
